@@ -1,6 +1,7 @@
 package org.pingvin.eggCaptureEvent;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,13 +16,14 @@ import java.util.UUID;
 
 
 public class TeamSystem {
-
+    MinecraftTeamManager minecraftTeamManager;
     ArrayList<Team> teamList;
     ArrayList<String> usedNames;
     SaveManager saveManager;
     int playerAccessLevel = 0;
 
-    public TeamSystem() {
+    public TeamSystem(EggCaptureEvent plugin) {
+        minecraftTeamManager = new MinecraftTeamManager(plugin);
         this.teamList = new ArrayList<>();
         this.usedNames = new ArrayList<>();
         this.saveManager = new SaveManager();
@@ -79,13 +81,20 @@ public class TeamSystem {
     public boolean addTeam(String saveTeamString) {
         Team team = new Team(this);
         if (!team.loadFromString(saveTeamString)) { return false; };
+        if (team.isDisplay) {
+            minecraftTeamManager.createTeamMC(team.displayName, team.color, true, true);
+        }
         return teamList.add(team);
     }
-    public boolean addTeam(String name, String color) {
+    public boolean addTeam(String name, String color, boolean isDisplay) {
         Team team = new Team(this);
         if (usedNames.contains(name)) { return false; };
         team.setDisplayName(name);
         team.setColor(color);
+        team.setIsDisplay(isDisplay);
+        if (isDisplay) {
+            minecraftTeamManager.createTeamMC(name, color, true, true);
+        }
         return teamList.add(team);
     }
 

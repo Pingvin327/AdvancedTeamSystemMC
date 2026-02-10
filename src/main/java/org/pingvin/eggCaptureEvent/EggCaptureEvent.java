@@ -9,7 +9,7 @@ public final class EggCaptureEvent extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        teamSystem = new TeamSystem();
+        teamSystem = new TeamSystem(this);
         commandManager = new CommandManager(teamSystem, this);
         commandManager.commandSystem.initialise();
     }

@@ -32,8 +32,8 @@ public class CommandManager {
             switch (args[0]) {
 
                 case "create":
-                    if (args.length != 3) {  return false; }
-                    commandSystem.teamSystem.addTeam(args[1], args[2]);
+                    if (args.length != 4) {  return false; }
+                    commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
                     return true;
 
                 case "join":
@@ -49,9 +49,10 @@ public class CommandManager {
                     if (args.length == 1) {
                         for (Team team1:commandSystem.teamSystem.teamList) {
                             StringBuilder output = new StringBuilder();
-                            output.append(team1.displayName).append(" ");
+                            output.append(team1.displayName).append(": ");
                             for (UUID playerId:team1.players) {
                                 output.append(playerId.toString());
+                                output.append(" ");
                             }
                             commandSystem.server.sendPlainMessage(output.toString());
                         }

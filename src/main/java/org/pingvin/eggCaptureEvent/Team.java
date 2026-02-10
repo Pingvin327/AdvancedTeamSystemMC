@@ -9,18 +9,22 @@ import java.util.UUID;
 public class Team {
     TeamSystem teamSystem;
     UUID teamId;
+    Boolean isDisplay;
     String displayName;
     String color;
     ArrayList<UUID> players;
     UUID leader;
 
     public Team(TeamSystem teamSystem) {
+
         this.teamSystem = teamSystem;
         this.teamId = UUID.randomUUID();
+        this.isDisplay = false;
         this.displayName = teamId.toString();
         this.color = "white";
         this.players = new ArrayList<>();
         this.leader = UUID.randomUUID();
+
     }
 
     public boolean loadFromString(String string) {
@@ -29,21 +33,22 @@ public class Team {
 
         String[] stringArray = string.split("\\$");
 
-        System.out.println(stringArray[0]);
-
-        if (stringArray.length != 5) { return false; };
+        if (stringArray.length != 6) { return false; };
 
         this.teamId = UUID.fromString(stringArray[0]);
-        this.displayName = stringArray[1];
-        this.color = stringArray[2];
 
-        String[] playerIds = stringArray[3].split("&");
+        this.isDisplay = Boolean.parseBoolean(stringArray[1]);
+
+        this.displayName = stringArray[2];
+        this.color = stringArray[3];
+
+        String[] playerIds = stringArray[4].split("&");
 
         for (String playerIdStr:playerIds) {
             addPlayer(UUID.fromString(playerIdStr));
         }
 
-        setLeader(UUID.fromString(stringArray[4]));
+        setLeader(UUID.fromString(stringArray[5]));
 
         return true;
     }
@@ -52,6 +57,7 @@ public class Team {
         StringBuilder output = new StringBuilder();
 
         output.append(teamId.toString()).append("$");
+        output.append(isDisplay.toString());
         output.append(displayName).append("$");
         output.append(color).append("$");
 
@@ -68,10 +74,13 @@ public class Team {
     public boolean addPlayer(Player player) {
         UUID playerId = player.getUniqueId();
         if (players.contains(playerId)) { return false; };
+        if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, player); }
         return players.add(playerId);
     }
+
     public boolean addPlayer(UUID playerId) {
         if (players.contains(playerId)) { return false; };
+        if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, playerId); }
         return players.add(playerId);
     }
 
@@ -99,5 +108,9 @@ public class Team {
 
     public void setColor(String color){
         this.color = color;
+    }
+
+    public void setIsDisplay(boolean isDisplay){
+        this.isDisplay = isDisplay;
     }
 }
