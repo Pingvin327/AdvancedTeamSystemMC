@@ -49,15 +49,22 @@ public class CommandManager {
                     if (args.length == 1) {
                         for (Team team1:commandSystem.teamSystem.teamList) {
                             StringBuilder output = new StringBuilder();
-                            output.append(team1.displayName);
+                            output.append(team1.displayName).append(" ");
                             for (UUID playerId:team1.players) {
                                 output.append(playerId.toString());
                             }
                             commandSystem.server.sendPlainMessage(output.toString());
                         }
                     }
+                    return true;
 
+                case "save":
 
+                    return commandSystem.teamSystem.saveTeams();
+
+                case "load":
+
+                    return  commandSystem.teamSystem.loadTeams();
             }
 
 

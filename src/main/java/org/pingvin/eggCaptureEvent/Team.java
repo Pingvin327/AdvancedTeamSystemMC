@@ -3,6 +3,7 @@ package org.pingvin.eggCaptureEvent;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class Team {
@@ -19,12 +20,16 @@ public class Team {
         this.displayName = teamId.toString();
         this.color = "white";
         this.players = new ArrayList<>();
-        this.leader = null;
+        this.leader = UUID.randomUUID();
     }
 
     public boolean loadFromString(String string) {
 
-        String[] stringArray = string.split("//$");
+        System.out.println(string);
+
+        String[] stringArray = string.split("\\$");
+
+        System.out.println(stringArray[0]);
 
         if (stringArray.length != 5) { return false; };
 

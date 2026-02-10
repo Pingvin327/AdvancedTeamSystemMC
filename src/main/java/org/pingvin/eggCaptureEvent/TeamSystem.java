@@ -18,20 +18,23 @@ public class TeamSystem {
 
     ArrayList<Team> teamList;
     ArrayList<String> usedNames;
+    SaveManager saveManager;
     int playerAccessLevel = 0;
 
     public TeamSystem() {
         this.teamList = new ArrayList<>();
+        this.usedNames = new ArrayList<>();
+        this.saveManager = new SaveManager();
     }
 
 
-    private class saveManager {
+    private class SaveManager {
 
         public boolean loadTeams() {
-            File pluginDirectory = new File("EggCaptureEvent");
+            File pluginDirectory = new File("plugins/EggCaptureEvent");
             pluginDirectory.mkdir();
 
-            File saveTeamFile = new File("EggCaptureEvent/team-save.txt");
+            File saveTeamFile = new File("plugins/EggCaptureEvent/team-save.txt");
 
             try (Scanner scanner = new Scanner(saveTeamFile)) {
                 while (scanner.hasNextLine()) {
@@ -47,7 +50,10 @@ public class TeamSystem {
         }
 
         public boolean saveTeamsFull() {
-            try (FileWriter writer = new FileWriter("filename.txt")) {
+            File pluginDirectory = new File("plugins/EggCaptureEvent");
+            pluginDirectory.mkdir();
+
+            try (FileWriter writer = new FileWriter("plugins/EggCaptureEvent/team-save.txt")) {
                 for (Team team:teamList) {
                     writer.write(team.exportToString());
                     writer.write("\n");
@@ -61,9 +67,19 @@ public class TeamSystem {
 
     }
 
+    public boolean saveTeams() {
+        return saveManager.saveTeamsFull();
+    }
+
+    public boolean loadTeams() {
+        return saveManager.loadTeams();
+    }
+
+
     public boolean addTeam(String saveTeamString) {
         Team team = new Team(this);
-        return team.loadFromString(saveTeamString);
+        if (!team.loadFromString(saveTeamString)) { return false; };
+        return teamList.add(team);
     }
     public boolean addTeam(String name, String color) {
         Team team = new Team(this);

@@ -1,7 +1,7 @@
 name: EggCaptureEvent
 version: '1.0-SNAPSHOT'
 main: org.pingvin.eggCaptureEvent.EggCaptureEvent
-api-version: '1.21'
+api-version: '1.21.4'
 commands:
   eventctl:
     description: Manage event
