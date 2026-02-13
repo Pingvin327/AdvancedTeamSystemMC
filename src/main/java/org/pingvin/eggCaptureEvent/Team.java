@@ -27,6 +27,10 @@ public class Team {
 
     }
 
+    public void deleteTeam() {
+        teamSystem.minecraftTeamManager.removeTeamMC(this);
+    }
+
     public boolean loadFromString(String string) {
 
         System.out.println(string);
@@ -44,8 +48,15 @@ public class Team {
 
         String[] playerIds = stringArray[4].split("&");
 
-        for (String playerIdStr:playerIds) {
-            addPlayer(UUID.fromString(playerIdStr));
+        if (isDisplay) {
+            teamSystem.minecraftTeamManager.createTeamMC(displayName, color, true, true);
+        }
+
+        if (!stringArray[4].equals(" ")) {
+
+            for (String playerIdStr : playerIds) {
+                addPlayer(UUID.fromString(playerIdStr));
+            }
         }
 
         setLeader(UUID.fromString(stringArray[5]));
@@ -57,10 +68,11 @@ public class Team {
         StringBuilder output = new StringBuilder();
 
         output.append(teamId.toString()).append("$");
-        output.append(isDisplay.toString());
+        output.append(isDisplay.toString()).append("$");
         output.append(displayName).append("$");
         output.append(color).append("$");
 
+        if (players.size() == 0) { output.append(" "); };
         for (UUID playerId:players) {
             output.append(playerId.toString()).append("&");
         }
@@ -69,6 +81,10 @@ public class Team {
         output.append(leader.toString());
 
         return output.toString();
+    }
+
+    public void playerOnJoinGame(Player player) {
+        if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, player); };
     }
 
     public boolean addPlayer(Player player) {
@@ -85,7 +101,13 @@ public class Team {
     }
 
     public  boolean removePlayer(Player player) {
+        if (isDisplay) { teamSystem.minecraftTeamManager.playerRemoveMC(this, player); }
         return players.remove(player.getUniqueId());
+    }
+
+    public  boolean removePlayer(UUID player) {
+        if (isDisplay) { teamSystem.minecraftTeamManager.playerRemoveMC(this, player); }
+        return players.remove(player);
     }
 
     public boolean setLeader(Player player) {
@@ -103,14 +125,30 @@ public class Team {
 
     public void setDisplayName(String displayName) {
         if (teamSystem.usedNames.contains(displayName)) { return; };
+
+        teamSystem.minecraftTeamManager.removeTeamMC(this);
         this.displayName = displayName;
+
+        if (isDisplay) {
+            teamSystem.minecraftTeamManager.createTeamMC(displayName, color, true, true);
+        }
     }
 
     public void setColor(String color){
         this.color = color;
+        teamSystem.minecraftTeamManager.setTeamColorMC(this, color);
     }
 
     public void setIsDisplay(boolean isDisplay){
+        if (this.isDisplay == isDisplay) { return; };
+
         this.isDisplay = isDisplay;
+        if (isDisplay) {
+            teamSystem.minecraftTeamManager.createTeamMC(displayName, color, true, true);
+        }
+        else {
+            teamSystem.minecraftTeamManager.removeTeamMC(this);
+        }
+
     }
 }

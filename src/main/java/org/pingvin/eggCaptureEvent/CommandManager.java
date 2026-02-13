@@ -36,13 +36,25 @@ public class CommandManager {
                     commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
                     return true;
 
+                case "remove":
+                    if (args.length != 2) { return false; };
+                    commandSystem.teamSystem.removeTeam(args[1]);
+
                 case "join":
                     if (args.length != 3) {  return false; }
-                    Team team = commandSystem.teamSystem.getTeam(args[1]);
-                    if (team == null) { return false; };
-                    Player player = commandSystem.server.getPlayer(args[2]);
-                    if (player == null) { return false; };
-                    team.addPlayer(player);
+                    Team teamJoin = commandSystem.teamSystem.getTeam(args[1]);
+                    if (teamJoin == null) { return false; };
+                    Player playerJoin = commandSystem.server.getPlayer(args[2]);
+                    commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
+                    return true;
+
+                case "leave":
+                    if (args.length != 3) {  return false; }
+                    Team teamLeave = commandSystem.teamSystem.getTeam(args[1]);
+                    if (teamLeave == null) { return false; };
+                    Player playerLeave = commandSystem.server.getPlayer(args[2]);
+                    if (playerLeave == null) { return false; };
+                    commandSystem.teamSystem.playerTeamLeave(teamLeave, playerLeave);
                     return true;
 
                 case "list":
