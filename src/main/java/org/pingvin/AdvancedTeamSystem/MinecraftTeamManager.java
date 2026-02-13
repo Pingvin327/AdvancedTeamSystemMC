@@ -1,8 +1,7 @@
-package org.pingvin.eggCaptureEvent;
+package org.pingvin.AdvancedTeamSystem;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -10,10 +9,10 @@ import java.util.UUID;
 
 public class MinecraftTeamManager {
 
-    EggCaptureEvent plugin;
+    AdvancedTeamSystem plugin;
     Scoreboard scoreboard;
 
-    public MinecraftTeamManager(EggCaptureEvent plugin) {
+    public MinecraftTeamManager(AdvancedTeamSystem plugin) {
         this.plugin = plugin;
         this.scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
     }

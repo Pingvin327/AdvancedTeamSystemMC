@@ -1,9 +1,8 @@
-package org.pingvin.eggCaptureEvent;
+package org.pingvin.AdvancedTeamSystem;
 
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 public class Team {

@@ -1,15 +1,13 @@
-package org.pingvin.eggCaptureEvent;
+package org.pingvin.AdvancedTeamSystem;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -17,14 +15,14 @@ import java.util.UUID;
 
 
 public class TeamSystem {
-    EggCaptureEvent plugin;
+    AdvancedTeamSystem plugin;
     MinecraftTeamManager minecraftTeamManager;
     ArrayList<Team> teamList;
     ArrayList<String> usedNames;
     SaveManager saveManager;
     int playerAccessLevel = 0;
 
-    public TeamSystem(EggCaptureEvent plugin) {
+    public TeamSystem(AdvancedTeamSystem plugin) {
         this.plugin = plugin;
         minecraftTeamManager = new MinecraftTeamManager(plugin);
         this.teamList = new ArrayList<>();

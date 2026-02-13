@@ -1,11 +1,10 @@
-package org.pingvin.eggCaptureEvent;
+package org.pingvin.AdvancedTeamSystem;
 
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -13,7 +12,7 @@ import java.util.UUID;
 public class CommandManager {
     CommandSystem commandSystem;
 
-    public CommandManager(TeamSystem teamSystem, EggCaptureEvent plugin) {
+    public CommandManager(TeamSystem teamSystem, AdvancedTeamSystem plugin) {
         this.commandSystem = new CommandSystem(teamSystem, plugin);
     }
 
@@ -87,9 +86,9 @@ public class CommandManager {
 
     public class CommandSystem {
         TeamSystem teamSystem;
-        EggCaptureEvent plugin;
+        AdvancedTeamSystem plugin;
         Server server;
-        public CommandSystem(TeamSystem teamSystem, EggCaptureEvent plugin){
+        public CommandSystem(TeamSystem teamSystem, AdvancedTeamSystem plugin){
             this.teamSystem = teamSystem;
             this.plugin = plugin;
             this.server = plugin.getServer();

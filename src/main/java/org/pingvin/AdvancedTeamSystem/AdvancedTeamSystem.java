@@ -1,8 +1,8 @@
-package org.pingvin.eggCaptureEvent;
+package org.pingvin.AdvancedTeamSystem;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class EggCaptureEvent extends JavaPlugin {
+public final class AdvancedTeamSystem extends JavaPlugin {
     TeamSystem teamSystem;
     CommandManager commandManager;
     ServerEventHandler eventHandler;
