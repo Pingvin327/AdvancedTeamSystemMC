@@ -48,7 +48,7 @@ public class CommandManager {
                     if (teamJoin == null) { return false; };
                     Player playerJoin = commandSystem.server.getPlayer(args[2]);
                     commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
-                    commandSender.sendMessage("Joined " + args[2] + " from " + args[1]);
+                    commandSender.sendMessage("Joined " + args[2] + " to " + args[1]);
                     return true;
 
                 case "leave":
