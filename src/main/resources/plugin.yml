@@ -1,4 +1,4 @@
-name: EggCaptureEvent
+name: AdvancedTeamSystem
 version: '1.0-SNAPSHOT'
 main: org.pingvin.AdvancedTeamSystem.AdvancedTeamSystem
 api-version: '1.21.4'

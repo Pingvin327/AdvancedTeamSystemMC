@@ -34,10 +34,10 @@ public class TeamSystem {
     private class SaveManager {
 
         public boolean loadTeams() {
-            File pluginDirectory = new File("plugins/EggCaptureEvent");
+            File pluginDirectory = new File("plugins/AdvancedTeamSystem");
             pluginDirectory.mkdir();
 
-            File saveTeamFile = new File("plugins/EggCaptureEvent/team-save.txt");
+            File saveTeamFile = new File("plugins/AdvancedTeamSystem/teams-save.txt");
 
             try (Scanner scanner = new Scanner(saveTeamFile)) {
                 while (scanner.hasNextLine()) {
@@ -53,10 +53,10 @@ public class TeamSystem {
         }
 
         public boolean saveTeamsFull() {
-            File pluginDirectory = new File("plugins/EggCaptureEvent");
+            File pluginDirectory = new File("plugins/AdvancedTeamSystem");
             pluginDirectory.mkdir();
 
-            try (FileWriter writer = new FileWriter("plugins/EggCaptureEvent/team-save.txt")) {
+            try (FileWriter writer = new FileWriter("plugins/AdvancedTeamSystem/teams-save.txt")) {
                 for (Team team:teamList) {
                     writer.write(team.exportToString());
                     writer.write("\n");
