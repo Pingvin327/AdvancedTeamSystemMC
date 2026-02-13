@@ -33,11 +33,14 @@ public class CommandManager {
                 case "create":
                     if (args.length != 4) {  return false; }
                     commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
+                    commandSender.sendMessage("Created team " + args[1]);
                     return true;
 
                 case "remove":
                     if (args.length != 2) { return false; };
                     commandSystem.teamSystem.removeTeam(args[1]);
+                    commandSender.sendMessage("Removed team " + args[1]);
+                    return true;
 
                 case "join":
                     if (args.length != 3) {  return false; }
@@ -45,6 +48,7 @@ public class CommandManager {
                     if (teamJoin == null) { return false; };
                     Player playerJoin = commandSystem.server.getPlayer(args[2]);
                     commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
+                    commandSender.sendMessage("Joined " + args[2] + " from " + args[1]);
                     return true;
 
                 case "leave":
@@ -54,6 +58,7 @@ public class CommandManager {
                     Player playerLeave = commandSystem.server.getPlayer(args[2]);
                     if (playerLeave == null) { return false; };
                     commandSystem.teamSystem.playerTeamLeave(teamLeave, playerLeave);
+                    commandSender.sendMessage("Removed " + args[2] + " from " + args[1]);
                     return true;
 
                 case "list":
@@ -65,7 +70,7 @@ public class CommandManager {
                                 output.append(playerId.toString());
                                 output.append(" ");
                             }
-                            commandSystem.server.sendPlainMessage(output.toString());
+                            commandSender.sendMessage(output.toString());
                         }
                     }
                     return true;
