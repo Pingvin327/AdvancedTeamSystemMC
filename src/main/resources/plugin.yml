@@ -3,6 +3,6 @@ version: '1.0-SNAPSHOT'
 main: org.pingvin.AdvancedTeamSystem.AdvancedTeamSystem
 api-version: '1.21.4'
 commands:
-  eventctl:
+  teamctl:
     description: Manage event
     usage: /<command>

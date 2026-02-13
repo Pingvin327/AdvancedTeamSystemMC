@@ -95,7 +95,7 @@ public class CommandManager {
         }
 
         public void initialise() {
-            plugin.getCommand("eventctl").setExecutor(new CommandExecutorMain(this));
+            plugin.getCommand("teamctl").setExecutor(new CommandExecutorMain(this));
         }
 
     }
