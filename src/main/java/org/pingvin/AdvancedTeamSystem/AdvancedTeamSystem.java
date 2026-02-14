@@ -16,6 +16,10 @@ public final class AdvancedTeamSystem extends JavaPlugin {
         teamSystem.loadTeams();
     }
 
+    public TeamSystem getTeamSystem(){
+        return this.teamSystem;
+    }
+
     @Override
     public void onDisable() {
         teamSystem.saveTeams();
