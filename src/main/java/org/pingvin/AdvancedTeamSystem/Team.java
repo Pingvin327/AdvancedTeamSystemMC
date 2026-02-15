@@ -12,6 +12,7 @@ public class Team {
     String displayName;
     String color;
     ArrayList<UUID> players;
+    Integer playerLimit;
     UUID leader;
 
     public Team(TeamSystem teamSystem) {
@@ -22,6 +23,7 @@ public class Team {
         this.displayName = teamId.toString();
         this.color = "white";
         this.players = new ArrayList<>();
+        this.playerLimit = Integer.MAX_VALUE;
         this.leader = UUID.randomUUID();
 
     }
@@ -36,7 +38,7 @@ public class Team {
 
         String[] stringArray = string.split("\\$");
 
-        if (stringArray.length != 6) { return false; };
+        if (stringArray.length != 7) { return false; };
 
         this.teamId = UUID.fromString(stringArray[0]);
 
@@ -58,7 +60,9 @@ public class Team {
             }
         }
 
-        setLeader(UUID.fromString(stringArray[5]));
+        setPlayerLimit(Integer.parseInt(stringArray[5]));
+
+        setLeader(UUID.fromString(stringArray[6]));
 
         return true;
     }
@@ -71,10 +75,14 @@ public class Team {
         output.append(displayName).append("$");
         output.append(color).append("$");
 
-        if (players.size() == 0) { output.append(" "); };
+        if (players.isEmpty()) { output.append(" "); };
         for (UUID playerId:players) {
             output.append(playerId.toString()).append("&");
         }
+        output.append("$");
+
+        output.append(playerLimit.toString());
+
         output.append("$");
 
         output.append(leader.toString());
@@ -148,6 +156,28 @@ public class Team {
         else {
             teamSystem.minecraftTeamManager.removeTeamMC(this);
         }
+    }
 
+    public void setPlayerLimit(int playerLimit){
+        if (playerLimit <= 0) { return; };
+        if (playerLimit >= this.playerLimit) { this.playerLimit = playerLimit; return; };
+        if (players.size() - playerLimit <= 0) { this.playerLimit = playerLimit; return; };
+
+        int toRemove = players.size() - playerLimit;
+
+        ArrayList<UUID> playerIdToRemove = new ArrayList<>();
+
+        for (UUID playerId:players) {
+            if (toRemove <= 0) { break; }
+
+            if (playerId != leader) {
+                playerIdToRemove.add(playerId);
+                toRemove -= 1;
+            }
+        }
+
+        for (UUID playerId:playerIdToRemove) {
+            removePlayer(playerId);
+        }
     }
 }

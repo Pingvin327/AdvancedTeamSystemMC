@@ -28,60 +28,77 @@ public class CommandManager {
 
             if (!commandSender.isOp() && commandSystem.teamSystem.playerAccessLevel == 0) { return false; };
 
-            switch (args[0]) {
+            try {
+                boolean result = false;
+                switch (args[0]) {
 
-                case "create":
-                    if (args.length != 4) {  return false; }
-                    commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
-                    commandSender.sendMessage("Created team " + args[1]);
-                    return true;
+                    case "create":
+                        if (args.length != 4) { return false; };
+                        commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
+                        commandSender.sendMessage("Created team " + args[1]);
+                        return true;
 
-                case "remove":
-                    if (args.length != 2) { return false; };
-                    commandSystem.teamSystem.removeTeam(args[1]);
-                    commandSender.sendMessage("Removed team " + args[1]);
-                    return true;
+                    case "remove":
+                        if (args.length != 2) { return false; };
+                        Team teamRemove = commandSystem.teamSystem.getTeam(args[1]);
+                        if (teamRemove == null) { return false;};
+                        commandSystem.teamSystem.removeTeam(teamRemove);
+                        commandSender.sendMessage("Removed team " + args[1]);
+                        return true;
 
-                case "join":
-                    if (args.length != 3) {  return false; }
-                    Team teamJoin = commandSystem.teamSystem.getTeam(args[1]);
-                    if (teamJoin == null) { return false; };
-                    Player playerJoin = commandSystem.server.getPlayer(args[2]);
-                    commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
-                    commandSender.sendMessage("Joined " + args[2] + " to " + args[1]);
-                    return true;
+                    case "join":
+                        if (args.length != 3) { return false; };
+                        Team teamJoin = commandSystem.teamSystem.getTeam(args[1]);
+                        if (teamJoin == null) { return false; };
+                        Player playerJoin = commandSystem.server.getPlayer(args[2]);
+                        commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
+                        commandSender.sendMessage("Joined " + args[2] + " to " + args[1]);
+                        return true;
 
-                case "leave":
-                    if (args.length != 3) {  return false; }
-                    Team teamLeave = commandSystem.teamSystem.getTeam(args[1]);
-                    if (teamLeave == null) { return false; };
-                    Player playerLeave = commandSystem.server.getPlayer(args[2]);
-                    if (playerLeave == null) { return false; };
-                    commandSystem.teamSystem.playerTeamLeave(teamLeave, playerLeave);
-                    commandSender.sendMessage("Removed " + args[2] + " from " + args[1]);
-                    return true;
+                    case "leave":
+                        if (args.length != 3) { return false; };
+                        Team teamLeave = commandSystem.teamSystem.getTeam(args[1]);
+                        if (teamLeave == null) { return false; };
+                        Player playerLeave = commandSystem.server.getPlayer(args[2]);
+                        if (playerLeave == null) { return false; };
+                        commandSystem.teamSystem.playerTeamLeave(teamLeave, playerLeave);
+                        commandSender.sendMessage("Removed " + args[2] + " from " + args[1]);
+                        return true;
 
-                case "list":
-                    if (args.length == 1) {
-                        for (Team team1:commandSystem.teamSystem.teamList) {
-                            StringBuilder output = new StringBuilder();
-                            output.append(team1.displayName).append(": ");
-                            for (UUID playerId:team1.players) {
-                                output.append(playerId.toString());
-                                output.append(" ");
+                    case "list":
+                        if (args.length == 1) {
+                            for (Team team1 : commandSystem.teamSystem.teamList) {
+                                StringBuilder output = new StringBuilder();
+                                output.append(team1.displayName).append(": ");
+                                for (UUID playerId : team1.players) {
+                                    output.append(playerId.toString());
+                                    output.append(" ");
+                                }
+                                commandSender.sendMessage(output.toString());
                             }
-                            commandSender.sendMessage(output.toString());
                         }
-                    }
-                    return true;
+                        return true;
 
-                case "save":
+                    case "limit":
+                        if (args.length != 3) { return false; };
+                        Team teamLimitSet = commandSystem.teamSystem.getTeam(args[1]);
+                        if (teamLimitSet == null) { return false; };
+                        int newPlayerLimit = Integer.parseInt(args[2]);
+                        teamLimitSet.setPlayerLimit(newPlayerLimit);
+                        commandSender.sendMessage("Set the limit for " + args[1] + " to " + newPlayerLimit);
+                        return true;
 
-                    return commandSystem.teamSystem.saveTeams();
+                    case "save":
 
-                case "load":
+                        return commandSystem.teamSystem.saveTeams();
 
-                    return  commandSystem.teamSystem.loadTeams();
+                    case "load":
+
+                        return commandSystem.teamSystem.loadTeams();
+                }
+            }
+            catch (Exception e) {
+                return false;
             }
 
 

@@ -106,14 +106,20 @@ public class TeamSystem {
     }
 
     public boolean playerTeamLeave(Team team, Player player) {
+        if (team == null) { return false; };
+        if (player == null) { return false; };
+
         return team.removePlayer(player);
     }
 
     public boolean playerTeamLeave(Team team, UUID player) {
+        if (team == null) { return false; };
         return team.removePlayer(player);
     }
 
     public boolean playerTeamJoin(Team team, Player player) {
+        if (team == null) { return false; };
+        if (player == null) { return false; };
         if (!team.isDisplay) {
             return team.addPlayer(player);
         }
@@ -125,6 +131,7 @@ public class TeamSystem {
     }
 
     public boolean playerTeamJoin(Team team, UUID player) {
+        if (team == null) { return false; };
         if (!team.isDisplay) {
             return team.addPlayer(player);
         }
@@ -136,8 +143,7 @@ public class TeamSystem {
     }
 
 
-    public boolean removeTeam(String displayName) {
-        Team team = getTeam(displayName);
+    public boolean removeTeam(Team team) {
         if (team == null) { return false; };
         team.deleteTeam();
         usedNames.remove(team.displayName);
@@ -147,6 +153,8 @@ public class TeamSystem {
 
     public ArrayList<Player> getTeamPlayers(Team team) {
         ArrayList<Player> players = new ArrayList<>();
+
+        if (team == null) { return players; };
 
         for (UUID player:team.players){
             Entity playerOnline = plugin.getServer().getEntity(player);
@@ -158,6 +166,7 @@ public class TeamSystem {
     }
 
     public Team getPlayerDisplayTeam(Player player) {
+        if (player == null) { return null; };
         UUID playerId = player.getUniqueId();
         for (Team teamCheck:teamList) {
             if (!teamCheck.isDisplay) { continue; };
