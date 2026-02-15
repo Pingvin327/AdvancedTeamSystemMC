@@ -183,6 +183,11 @@ public class TeamSystem {
         return null;
     }
 
+    public boolean setTeamLimit(Team team, int limit){
+        if (team == null) { return false; };
+        team.setPlayerLimit(limit);
+        return true;
+    }
 
     public Team getTeam(String name) {
         for (Team team:teamList){

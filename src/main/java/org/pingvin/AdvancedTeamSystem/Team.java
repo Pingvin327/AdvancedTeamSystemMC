@@ -91,10 +91,12 @@ public class Team {
     }
 
     public void playerOnJoinGame(Player player) {
+        if (player == null) { return; };
         if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, player); };
     }
 
     public boolean addPlayer(Player player) {
+        if (player == null) { return false; };
         UUID playerId = player.getUniqueId();
         if (players.contains(playerId)) { return false; };
         if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, player); }
@@ -108,6 +110,7 @@ public class Team {
     }
 
     public  boolean removePlayer(Player player) {
+        if (player == null) { return false; };
         if (isDisplay) { teamSystem.minecraftTeamManager.playerRemoveMC(this, player); }
         return players.remove(player.getUniqueId());
     }
@@ -118,6 +121,7 @@ public class Team {
     }
 
     public boolean setLeader(Player player) {
+        if (player == null) { return false; };
         UUID playerId = player.getUniqueId();
         if (!players.contains(playerId)) { return false; };
         leader = playerId;

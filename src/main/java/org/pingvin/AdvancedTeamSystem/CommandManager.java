@@ -34,26 +34,26 @@ public class CommandManager {
 
                     case "create":
                         if (args.length != 4) { return false; };
-                        commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
-                        commandSender.sendMessage("Created team " + args[1]);
-                        return true;
+                        result = commandSystem.teamSystem.addTeam(args[1], args[2], Boolean.parseBoolean(args[3]));
+                        if (result) { commandSender.sendMessage("Created team " + args[1]); };
+                        return result;
 
                     case "remove":
                         if (args.length != 2) { return false; };
                         Team teamRemove = commandSystem.teamSystem.getTeam(args[1]);
                         if (teamRemove == null) { return false;};
-                        commandSystem.teamSystem.removeTeam(teamRemove);
-                        commandSender.sendMessage("Removed team " + args[1]);
-                        return true;
+                        result = commandSystem.teamSystem.removeTeam(teamRemove);
+                        if (result) { commandSender.sendMessage("Removed team " + args[1]); };
+                        return result;
 
                     case "join":
                         if (args.length != 3) { return false; };
                         Team teamJoin = commandSystem.teamSystem.getTeam(args[1]);
                         if (teamJoin == null) { return false; };
                         Player playerJoin = commandSystem.server.getPlayer(args[2]);
-                        commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
-                        commandSender.sendMessage("Joined " + args[2] + " to " + args[1]);
-                        return true;
+                        result  = commandSystem.teamSystem.playerTeamJoin(teamJoin, playerJoin);
+                        if (result) { commandSender.sendMessage("Joined " + args[2] + " to " + args[1]); }
+                        return result;
 
                     case "leave":
                         if (args.length != 3) { return false; };
@@ -61,9 +61,9 @@ public class CommandManager {
                         if (teamLeave == null) { return false; };
                         Player playerLeave = commandSystem.server.getPlayer(args[2]);
                         if (playerLeave == null) { return false; };
-                        commandSystem.teamSystem.playerTeamLeave(teamLeave, playerLeave);
-                        commandSender.sendMessage("Removed " + args[2] + " from " + args[1]);
-                        return true;
+                        result = commandSystem.teamSystem.playerTeamLeave(teamLeave, playerLeave);
+                        if (result) { commandSender.sendMessage("Removed " + args[2] + " from " + args[1]); };
+                        return result;
 
                     case "list":
                         if (args.length == 1) {
@@ -84,9 +84,9 @@ public class CommandManager {
                         Team teamLimitSet = commandSystem.teamSystem.getTeam(args[1]);
                         if (teamLimitSet == null) { return false; };
                         int newPlayerLimit = Integer.parseInt(args[2]);
-                        teamLimitSet.setPlayerLimit(newPlayerLimit);
-                        commandSender.sendMessage("Set the limit for " + args[1] + " to " + newPlayerLimit);
-                        return true;
+                        result = commandSystem.teamSystem.setTeamLimit(teamLimitSet, newPlayerLimit);
+                        if (result) { commandSender.sendMessage("Set the limit for " + args[1] + " to " + newPlayerLimit); };
+                        return result;
 
                     case "save":
 
