@@ -25,10 +25,10 @@ public class TeamSystem {
     SaveManager saveManager;
     int playerAccessLevel = 0;
 
-    public TeamSystem(AdvancedTeamSystem plugin) {
+    public TeamSystem(AdvancedTeamSystem plugin, ATSEventManager eventSender) {
         this.plugin = plugin;
         this.server = plugin.getServer();
-        this.eventSender = plugin.eventSender;
+        this.eventSender = eventSender;
         minecraftTeamManager = new MinecraftTeamManager(plugin);
         this.teamList = new ArrayList<>();
         this.usedNames = new ArrayList<>();

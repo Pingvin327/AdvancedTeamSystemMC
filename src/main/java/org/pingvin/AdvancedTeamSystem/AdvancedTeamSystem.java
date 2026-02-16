@@ -6,15 +6,13 @@ public final class AdvancedTeamSystem extends JavaPlugin {
     TeamSystem teamSystem;
     static TeamSystem teamSystemStatic = null;
     ATSEventManager eventSender;
-    static ATSEventManager eventSenderStatic = null;
     CommandManager commandManager;
     ServerEventHandler eventHandler;
 
     @Override
     public void onEnable() {
         eventSender = new ATSEventManager();
-        eventSenderStatic = eventSender;
-        teamSystem = new TeamSystem(this);
+        teamSystem = new TeamSystem(this, eventSender);
         teamSystemStatic = teamSystem;
         commandManager = new CommandManager(teamSystem, this);
         commandManager.commandSystem.initialise();
@@ -26,7 +24,6 @@ public final class AdvancedTeamSystem extends JavaPlugin {
         return teamSystemStatic;
     }
 
-    public static ATSEventManager getEventSender() {return eventSenderStatic; };
 
     @Override
     public void onDisable() {
