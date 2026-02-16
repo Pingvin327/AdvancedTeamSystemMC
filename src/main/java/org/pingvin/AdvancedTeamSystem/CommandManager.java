@@ -74,6 +74,14 @@ public class CommandManager {
                                     output.append(playerId.toString());
                                     output.append(" ");
                                 }
+
+                                output.append("(");
+                                for (Player playerList:commandSystem.teamSystem.getPlayersByTeam(team1)) {
+                                    output.append(playerList.getName());
+                                    output.append(" ");
+                                }
+                                output.append(")");
+
                                 commandSender.sendMessage(output.toString());
                             }
                         }

@@ -1,5 +1,6 @@
 package org.pingvin.AdvancedTeamSystem;
 
+import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -16,6 +17,8 @@ import java.util.UUID;
 
 public class TeamSystem {
     AdvancedTeamSystem plugin;
+    Server server;
+    ATSEventManager eventSender;
     MinecraftTeamManager minecraftTeamManager;
     ArrayList<Team> teamList;
     ArrayList<String> usedNames;
@@ -24,6 +27,8 @@ public class TeamSystem {
 
     public TeamSystem(AdvancedTeamSystem plugin) {
         this.plugin = plugin;
+        this.server = plugin.getServer();
+        this.eventSender = plugin.eventSender;
         minecraftTeamManager = new MinecraftTeamManager(plugin);
         this.teamList = new ArrayList<>();
         this.usedNames = new ArrayList<>();
@@ -76,7 +81,9 @@ public class TeamSystem {
 
     public boolean loadTeams() {
         minecraftTeamManager.flushTeams();
-        return saveManager.loadTeams();
+        boolean result = saveManager.loadTeams();
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
 
     public void initialisePlayer(Player player) {
@@ -87,6 +94,7 @@ public class TeamSystem {
                 team.playerOnJoinGame(player);
             }
         }
+        eventSender.sendTeamsUpdate();
 
     }
 
@@ -94,7 +102,10 @@ public class TeamSystem {
     public boolean addTeam(String saveTeamString) {
         Team team = new Team(this);
         if (!team.loadFromString(saveTeamString)) { return false; };
-        return teamList.add(team);
+
+        boolean result = teamList.add(team);
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
     public boolean addTeam(String name, String color, boolean isDisplay) {
         Team team = new Team(this);
@@ -102,44 +113,60 @@ public class TeamSystem {
         team.setDisplayName(name);
         team.setColor(color);
         team.setIsDisplay(isDisplay);
-        return teamList.add(team);
+
+        boolean result = teamList.add(team);
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
 
     public boolean playerTeamLeave(Team team, Player player) {
         if (team == null) { return false; };
         if (player == null) { return false; };
 
-        return team.removePlayer(player);
+        boolean result = team.removePlayer(player);
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
 
     public boolean playerTeamLeave(Team team, UUID player) {
         if (team == null) { return false; };
-        return team.removePlayer(player);
+
+        boolean result = team.removePlayer(player);
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
 
     public boolean playerTeamJoin(Team team, Player player) {
         if (team == null) { return false; };
         if (player == null) { return false; };
+
+        boolean result = false;
+
         if (!team.isDisplay) {
-            return team.addPlayer(player);
+            result = team.addPlayer(player);
         }
         else {
             Team teamToLeave = getPlayerDisplayTeam(player);
             if (teamToLeave != null ) { teamToLeave.removePlayer(player); };
-            return team.addPlayer(player);
+            result = team.addPlayer(player);
         }
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
 
     public boolean playerTeamJoin(Team team, UUID player) {
         if (team == null) { return false; };
+        boolean result = false;
         if (!team.isDisplay) {
-            return team.addPlayer(player);
+            result = team.addPlayer(player);
         }
         else {
             Team teamToLeave = getPlayerDisplayTeam(player);
             if (teamToLeave != null ) { teamToLeave.removePlayer(player); };
-            return team.addPlayer(player);
+            result = team.addPlayer(player);
         }
+        if (result) { eventSender.sendTeamsUpdate(); };
+        return result;
     }
 
 
@@ -148,6 +175,7 @@ public class TeamSystem {
         team.deleteTeam();
         usedNames.remove(team.displayName);
         teamList.remove(team);
+        eventSender.sendTeamsUpdate();
         return true;
     }
 
@@ -157,8 +185,8 @@ public class TeamSystem {
         if (team == null) { return players; };
 
         for (UUID player:team.players){
-            Entity playerOnline = plugin.getServer().getEntity(player);
-            if (plugin.getServer().getEntity(player) != null && playerOnline instanceof Player) {
+            Entity playerOnline = server.getEntity(player);
+            if (server.getEntity(player) != null && playerOnline instanceof Player) {
                 players.add((Player) playerOnline);
             }
         }
@@ -186,7 +214,20 @@ public class TeamSystem {
     public boolean setTeamLimit(Team team, int limit){
         if (team == null) { return false; };
         team.setPlayerLimit(limit);
+        eventSender.sendTeamsUpdate();
         return true;
+    }
+
+    public ArrayList<Player> getPlayersByTeam(Team team) {
+
+        ArrayList<Player> playersOut = new ArrayList<>();
+
+        for (UUID playerId:team.players) {
+            Player player = server.getPlayer(playerId);
+            if (player == null) { break; };
+            playersOut.add(player);
+        }
+        return playersOut;
     }
 
     public Team getTeam(String name) {
