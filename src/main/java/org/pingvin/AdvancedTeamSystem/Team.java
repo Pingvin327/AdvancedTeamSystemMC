@@ -97,6 +97,7 @@ public class Team {
 
     public boolean addPlayer(Player player) {
         if (player == null) { return false; };
+        if (players.size() + 1 > playerLimit) { return false; };
         UUID playerId = player.getUniqueId();
         if (players.contains(playerId)) { return false; };
         if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, player); }
@@ -105,6 +106,7 @@ public class Team {
 
     public boolean addPlayer(UUID playerId) {
         if (players.contains(playerId)) { return false; };
+        if (players.size() + 1 > playerLimit) { return false; };
         if (isDisplay) { teamSystem.minecraftTeamManager.playerAddMC(this, playerId); }
         return players.add(playerId);
     }
@@ -183,5 +185,6 @@ public class Team {
         for (UUID playerId:playerIdToRemove) {
             removePlayer(playerId);
         }
+        this.playerLimit = playerLimit;
     }
 }

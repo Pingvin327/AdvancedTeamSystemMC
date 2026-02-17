@@ -81,9 +81,18 @@ public class TeamSystem {
 
     public boolean loadTeams() {
         minecraftTeamManager.flushTeams();
+        ArrayList<Team> teamListOld = new ArrayList<>(teamList);
+        ArrayList<String> usedNamesOld = new ArrayList<>(usedNames);
+        teamList.clear();
+        usedNames.clear();
         boolean result = saveManager.loadTeams();
-        if (result) { eventSender.sendTeamsUpdate(); };
-        return result;
+        if (!result) {
+            teamList.addAll(teamListOld);
+            usedNames.addAll(usedNamesOld);
+            return false;
+        }
+        eventSender.sendTeamsUpdate();
+        return true;
     }
 
     public void initialisePlayer(Player player) {
@@ -104,7 +113,10 @@ public class TeamSystem {
         if (!team.loadFromString(saveTeamString)) { return false; };
 
         boolean result = teamList.add(team);
-        if (result) { eventSender.sendTeamsUpdate(); };
+        if (result) {
+            usedNames.add(team.displayName);
+            eventSender.sendTeamsUpdate();
+        };
         return result;
     }
     public boolean addTeam(String name, String color, boolean isDisplay) {
@@ -115,7 +127,10 @@ public class TeamSystem {
         team.setIsDisplay(isDisplay);
 
         boolean result = teamList.add(team);
-        if (result) { eventSender.sendTeamsUpdate(); };
+        if (result) {
+            usedNames.add(name);
+            eventSender.sendTeamsUpdate();
+        };
         return result;
     }
 
