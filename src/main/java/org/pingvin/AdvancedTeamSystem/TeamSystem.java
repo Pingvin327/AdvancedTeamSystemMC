@@ -95,6 +95,14 @@ public class TeamSystem {
         return true;
     }
 
+    public boolean flushTeams() {
+        minecraftTeamManager.flushTeams();
+        for (Team team:teamList){
+            removeTeam(team);
+        }
+        return true;
+    }
+
     public void initialisePlayer(Player player) {
         UUID playerId = player.getUniqueId();
 
@@ -233,17 +241,88 @@ public class TeamSystem {
         return true;
     }
 
-    public ArrayList<Player> getPlayersByTeam(Team team) {
+
+    public boolean setDisplayName(Team team, String name) {
+        if (team == null) { return false; };
+
+        team.setDisplayName(name);
+        return true;
+    }
+
+    public boolean setTeamColor(Team team, String color) {
+        if (team == null) { return false; };
+
+        team.setColor(color);
+        return true;
+    }
+
+    public boolean setTeamLeader(Team team, Player player) {
+        if (team == null) { return false; };
+        if (player == null) { return false; };
+
+        return team.setLeader(player);
+
+    }
+
+    public boolean setTeamLeader(Team team, UUID player) {
+        if (team == null) { return false; };
+        if (player == null) { return false; };
+
+        return team.setLeader(player);
+
+    }
+
+    public UUID getLeader(Team team){
+        if (team == null) { return null; };
+        return team.getLeader();
+    }
+
+    public ArrayList<Player> getOnlinePlayersByTeam(Team team) {
 
         ArrayList<Player> playersOut = new ArrayList<>();
 
         for (UUID playerId:team.players) {
             Player player = server.getPlayer(playerId);
-            if (player == null) { break; };
+            if (player == null) { continue; };
             playersOut.add(player);
         }
         return playersOut;
     }
+
+    public ArrayList<UUID> getAllPlayersByTeam(Team team) {
+
+        ArrayList<UUID> playersOut = new ArrayList<>();
+
+        for (UUID playerId:team.players) {
+            playersOut.add(playerId);
+        }
+        return playersOut;
+    }
+
+    public ArrayList<Team> getTeamsByPlayer(Player player) {
+        ArrayList<Team> teamsOut = new ArrayList<>();
+        if (player == null) { return null; };
+
+        for (Team team:teamList) {
+            if (team.players.contains(player.getUniqueId())) {
+                teamsOut.add(team);
+            }
+        }
+        return teamsOut;
+    }
+
+    public ArrayList<Team> getTeamsByPlayer(UUID player) {
+        ArrayList<Team> teamsOut = new ArrayList<>();
+        if (player == null) { return null; };
+
+        for (Team team:teamList) {
+            if (team.players.contains(player)) {
+                teamsOut.add(team);
+            }
+        }
+        return teamsOut;
+    }
+
 
     public Team getTeam(String name) {
         for (Team team:teamList){

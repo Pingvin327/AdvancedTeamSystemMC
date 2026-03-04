@@ -70,13 +70,13 @@ public class CommandManager {
                             for (Team team1 : commandSystem.teamSystem.teamList) {
                                 StringBuilder output = new StringBuilder();
                                 output.append(team1.displayName).append(": ");
-                                for (UUID playerId : team1.players) {
+                                for (UUID playerId : commandSystem.teamSystem.getAllPlayersByTeam(team1)) {
                                     output.append(playerId.toString());
                                     output.append(" ");
                                 }
 
                                 output.append("(");
-                                for (Player playerList:commandSystem.teamSystem.getPlayersByTeam(team1)) {
+                                for (Player playerList:commandSystem.teamSystem.getOnlinePlayersByTeam(team1)) {
                                     output.append(playerList.getName());
                                     output.append(" ");
                                 }

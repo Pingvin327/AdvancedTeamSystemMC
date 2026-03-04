@@ -164,6 +164,14 @@ public class Team {
         }
     }
 
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    public UUID getLeader(){
+        return leader;
+    }
+
     public void setPlayerLimit(int playerLimit){
         if (playerLimit <= 0) { return; };
         if (playerLimit >= this.playerLimit) { this.playerLimit = playerLimit; return; };
